@@ -146,6 +146,29 @@ __isl_give isl_ast_print_options *isl_ast_print_options_set_print_for(
 	return options;
 }
 
+/* : Added for PolyXB.
+ *
+ * Set the print_mark callback of "options" to "print_mark".
+ *
+ * If this callback is set, then it's used to print mark nodes in the AST.
+ */
+__isl_give isl_ast_print_options *isl_ast_print_options_set_print_mark(
+	__isl_take isl_ast_print_options *options,
+	__isl_give isl_printer *(*print_mark)(__isl_take isl_printer *p,
+		__isl_take isl_ast_print_options *options,
+		__isl_keep isl_ast_node *node, void *user),
+	void *user)
+{
+	options = isl_ast_print_options_cow(options);
+	if (!options)
+		return NULL;
+	
+	options->print_mark = print_mark;
+	options->print_mark_user - user;
+
+	return options;
+}
+
 __isl_give isl_ast_expr *isl_ast_expr_copy(__isl_keep isl_ast_expr *expr)
 {
 	if (!expr)
@@ -2470,6 +2493,11 @@ static __isl_give isl_printer *print_ast_node_c(__isl_take isl_printer *p,
 		p = isl_printer_print_str(p, "// ");
 		p = isl_printer_print_str(p, isl_id_get_name(node->u.m.mark));
 		p = isl_printer_end_line(p);
+		/* : Added for PolyXB. */
+		if (options->print_mark)
+			return options->print_mark(p,
+					isl_ast_print_options_copy(options),
+					node, isl_id_get_user(node->u.m.mark));
 		p = print_ast_node_c(p, node->u.m.node, options, 0, in_list);
 		break;
 	case isl_ast_node_user:
