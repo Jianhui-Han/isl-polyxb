@@ -147,9 +147,7 @@ __isl_give isl_ast_print_options *isl_ast_print_options_set_print_for(
 }
 
 /* : Added for PolyXB.
- *
  * Set the print_mark callback of "options" to "print_mark".
- *
  * If this callback is set, then it's used to print mark nodes in the AST.
  */
 __isl_give isl_ast_print_options *isl_ast_print_options_set_print_mark(
@@ -164,7 +162,7 @@ __isl_give isl_ast_print_options *isl_ast_print_options_set_print_mark(
 		return NULL;
 	
 	options->print_mark = print_mark;
-	options->print_mark_user - user;
+	options->print_mark_user = user;
 
 	return options;
 }
@@ -1200,6 +1198,28 @@ isl_bool isl_ast_node_for_is_degenerate(__isl_keep isl_ast_node *node)
 		isl_die(isl_ast_node_get_ctx(node), isl_error_invalid,
 			"not a for node", return isl_bool_error);
 	return isl_bool_ok(node->u.f.degenerate);
+}
+
+/* : Added for PolyXB. 
+ * We need a "backdoor" to build customized a for ast_node.
+ */
+__isl_give isl_ast_node *isl_ast_node_for_build(
+	isl_ctx *ctx, isl_ast_expr *iter, isl_ast_expr *init,
+	isl_ast_expr *cond, isl_ast_expr *inc, isl_ast_node *body)
+{
+	isl_ast_node *node;
+
+	node = isl_ast_node_alloc(ctx, isl_ast_node_for);
+	if (!node)
+		return NULL;
+
+	node->u.f.iterator = iter;
+	node->u.f.init = init;
+	node->u.f.cond = cond;
+	node->u.f.inc = inc;
+	node->u.f.body = body;
+
+	return node;
 }
 
 __isl_give isl_ast_expr *isl_ast_node_for_get_iterator(
