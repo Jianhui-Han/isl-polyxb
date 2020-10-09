@@ -1222,6 +1222,23 @@ __isl_give isl_ast_node *isl_ast_node_for_build(
 	return node;
 }
 
+/* : Added for PolyXB.
+ * We need a "backdoor" to build customized a block ast_node.
+ */
+__isl_give isl_ast_node *isl_ast_node_block_build(
+	isl_ctx *ctx, __isl_take isl_ast_node_list *list)
+{
+	isl_ast_node *node;
+
+	node = isl_ast_node_alloc(ctx, isl_ast_node_block);
+	if (!node)
+		return NULL;
+
+	node->u.b.children = list;
+
+	return node;
+}
+
 __isl_give isl_ast_expr *isl_ast_node_for_get_iterator(
 	__isl_keep isl_ast_node *node)
 {

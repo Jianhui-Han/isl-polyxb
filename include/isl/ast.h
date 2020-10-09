@@ -135,8 +135,13 @@ isl_bool isl_ast_node_for_is_degenerate(__isl_keep isl_ast_node *node);
 
 /* : Added for PolyXB. */
 __isl_give isl_ast_node *isl_ast_node_for_build(
-	isl_ctx *ctx, isl_ast_expr *iter, isl_ast_expr *init,
-	isl_ast_expr *cond, isl_ast_expr *inc, isl_ast_node *body);
+	isl_ctx *ctx, __isl_take isl_ast_expr *iter,
+	__isl_take isl_ast_expr *init,
+	__isl_take isl_ast_expr *cond,
+	__isl_take isl_ast_expr *inc,
+	__isl_take isl_ast_node *body);
+__isl_give isl_ast_node *isl_ast_node_block_build(
+	isl_ctx *ctx, __isl_take isl_ast_node_list *list);
 
 __isl_export
 __isl_give isl_ast_expr *isl_ast_node_if_get_cond(
