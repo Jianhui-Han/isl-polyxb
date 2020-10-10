@@ -1239,6 +1239,27 @@ __isl_give isl_ast_node *isl_ast_node_block_build(
 	return node;
 }
 
+/* : Added for PolyXB.
+ * We need a "backdoor" to build customized a if ast_node.
+ */
+__isl_give isl_ast_node *isl_ast_node_if_build(
+	isl_ctx *ctx, __isl_take isl_ast_expr *guard,
+	__isl_take isl_ast_node *then,
+	__isl_take isl_ast_node *else_node)
+{
+	isl_ast_node *node;
+
+	node = isl_ast_node_alloc(ctx, isl_ast_node_if);
+	if (!node)
+		return NULL;
+	
+	node->u.i.guard = guard;
+	node->u.i.then = then;
+	node->u.i.else_node = else_node;
+
+	return node;
+}
+
 __isl_give isl_ast_expr *isl_ast_node_for_get_iterator(
 	__isl_keep isl_ast_node *node)
 {

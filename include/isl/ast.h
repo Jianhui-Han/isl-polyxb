@@ -142,6 +142,10 @@ __isl_give isl_ast_node *isl_ast_node_for_build(
 	__isl_take isl_ast_node *body);
 __isl_give isl_ast_node *isl_ast_node_block_build(
 	isl_ctx *ctx, __isl_take isl_ast_node_list *list);
+__isl_give isl_ast_node *isl_ast_node_if_build(
+	isl_ctx *ctx, __isl_take isl_ast_expr *guard,
+	__isl_take isl_ast_node *then,
+	__isl_take isl_ast_node *else_node);
 
 __isl_export
 __isl_give isl_ast_expr *isl_ast_node_if_get_cond(
